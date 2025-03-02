@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập / Đăng ký | Rin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_login.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon.png') }}"> 
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-switch">
+            <span class="form-switch-text active" onclick="showLogin()">Đăng nhập</span>
+            <span class="form-switch-text" onclick="showRegister()">Đăng ký</span>
+        </div>
+        <div class="wrapper">
+          <div class="form-box login">
+            <form id="loginForm" action="{{ url_for('login') }}" method="POST">
+                <h2>Đăng nhập</h2>
+                <div class="input-box">
+                    <span id="login-username-error" class="error-message"></span>
+                    <input type="text" name="username" placeholder="Tên đăng nhập" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <span id="login-password-error" class="error-message"></span>
+                    <input type="password" name="password" placeholder="Mật khẩu" required>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <span id="login-general-error" class="error-message"></span> <input type="hidden" name="next" value="{{ next }}">
+                <button type="submit" class="btn">Đăng nhập</button>
+            </form>
+        </div>
+
+            <div class="form-box register">
+                <form id="registerForm" action="{{ url_for('register') }}" method="POST">
+                    <h2>Đăng ký</h2>
+                    <div class="input-box">
+                        <span id="register-username-error" class="error-message"></span>
+                        <input type="text" name="username" placeholder="Tên đăng nhập" required>
+                        <i class='bx bxs-user'></i>
+                    </div>
+                    <div class="input-box">
+                        <span id="register-email-error" class="error-message"></span>
+                        <input type="email" name="email" placeholder="Email" required>
+                        <i class='bx bxs-envelope'></i>
+                    </div>
+                    <div class="input-box">
+                        <span id="register-password-error" class="error-message"></span>
+                        <input type="password" name="password" placeholder="Mật khẩu" required>
+                        <i class='bx bxs-lock-alt'></i>
+                    </div>
+                    <div class="input-box">
+                        <span id="register-confirm-password-error" class="error-message"></span>
+                        <input type="password" name="confirm_password" placeholder="Xác nhận mật khẩu" required>
+                        <i class='bx bxs-lock-alt'></i>
+                    </div>
+                    <button type="submit" class="btn">Đăng ký</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/animationloginregister.js') }}"></script>
+</body>
+
+</html>

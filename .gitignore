@@ -1,0 +1,19 @@
+# Môi trường ảo (virtual environment)
+moitruongao/
+
+# File cấu hình, chứa thông tin nhạy cảm
+app/.env
+
+# Thư mục chứa dữ liệu người dùng
+user_data/
+
+# Các file/thư mục Python thường bỏ qua
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.vscode/
+
+# file hệ thống macOS (nếu có)
+.DS_Store

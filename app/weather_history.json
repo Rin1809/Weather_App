@@ -1,0 +1,65 @@
+[
+    {
+        "thanh_pho": "Ha Noi",
+        "data": {
+            "coord": {
+                "lon": 105.8412,
+                "lat": 21.0245
+            },
+            "thanh_pho": "Hà Nội",
+            "nhiet_do": 9,
+            "cam_giac": 7.51,
+            "mo_ta": "bầu trời quang đãng",
+            "icon": "01n",
+            "do_am": 66,
+            "ap_suat": 1028,
+            "gio": 2.68,
+            "sunrise": "06:35",
+            "sunset": "17:33",
+            "hourly": []
+        },
+        "timestamp": "2025-01-12 06:00:59"
+    },
+    {
+        "thanh_pho": "Seoul",
+        "data": {
+            "coord": {
+                "lon": 126.9778,
+                "lat": 37.5683
+            },
+            "thanh_pho": "Seoul",
+            "nhiet_do": -11.24,
+            "cam_giac": -11.24,
+            "mo_ta": "bầu trời quang đãng",
+            "icon": "01n",
+            "do_am": 100,
+            "ap_suat": 1025,
+            "gio": 1.03,
+            "sunrise": "05:46",
+            "sunset": "15:33",
+            "hourly": []
+        },
+        "timestamp": "2025-01-12 04:43:39"
+    },
+    {
+        "thanh_pho": "Tokyo",
+        "data": {
+            "coord": {
+                "lon": 139.6917,
+                "lat": 35.6895
+            },
+            "thanh_pho": "Tokyo",
+            "nhiet_do": 3.06,
+            "cam_giac": 0.21,
+            "mo_ta": "mây đen u ám",
+            "icon": "04n",
+            "do_am": 57,
+            "ap_suat": 1022,
+            "gio": 2.96,
+            "sunrise": "04:50",
+            "sunset": "14:47",
+            "hourly": []
+        },
+        "timestamp": "2025-01-12 04:42:42"
+    }
+]

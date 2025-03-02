@@ -1,0 +1,225 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url(../images/bg.jpg) no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.form-switch {
+  display: flex;
+  justify-content: center;
+  width: 420px;
+  margin-bottom: -20px;
+  z-index: 1;
+}
+
+.form-switch-text {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 0 10px;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
+}
+
+.form-switch-text:hover {
+  background-color: rgba(255, 255, 255, 0.2); 
+}
+
+.form-switch-text.active {
+  color: #ffafaf; 
+  text-shadow: 0 2px 4px rgba(255, 175, 175, 0.8);
+}
+
+.wrapper {
+  width: 420px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, .2);
+  backdrop-filter: blur(9px);
+  color: #fff;
+  border-radius: 20px;
+  padding: 30px 40px;
+  position: relative;
+  min-height: 450px;
+  transition: all 0.5s ease;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, .2);
+  transition: min-height 0.5s ease;
+  overflow: hidden; 
+}
+
+.wrapper .form-box {
+  position: absolute;
+  width: 91%;
+  padding: 40px 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.wrapper .form-box.login {
+  opacity: 1;
+}
+
+.wrapper .form-box.register {
+  transform: translateX(calc(-50% + 420px));
+  opacity: 0;
+}
+
+.wrapper.active .form-box.login {
+  transform: translateX(calc(-50% - 420px));
+  opacity: 0;
+}
+
+.wrapper.active .form-box.register {
+  transform: translateX(-50%);
+  opacity: 1;
+}
+
+.wrapper h2 {
+  font-size: 36px;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
+.wrapper .input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin: 30px 0;
+}
+
+.input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, .5);
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
+  padding: 20px 45px 20px 20px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, .2);
+}
+
+.input-box input::placeholder {
+  color: #fff;
+}
+
+.input-box i {
+  position: absolute;
+  right: 20px;
+  top: 30%;
+  transform: translate(-50%);
+  font-size: 20px;
+  color: rgba(255, 255, 255, .5);
+}
+
+.wrapper .btn {
+  width: 100%;
+  height: 45px;
+  background: #fff;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, .3);
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.error-container {
+  margin-bottom: 10px;
+  min-height: 20px;
+}
+
+.form-box.login .error-container {
+  margin-bottom: 20px;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin: 0;
+  animation: fadeIn 0.5s ease-in-out;
+  opacity: 0; 
+  transform: translateY(-10px); 
+}
+.error.active {
+  opacity: 1; 
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(-10px);
+  }
+
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 5px;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.error-message.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.error-message:before {
+  content: '! ';
+  display: inline-block;
+  font-weight: bold;
+  margin-right: 3px;
+}
+
+.input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin: 30px 0;
+}
+
+.input-box .error-message {
+  position: absolute;
+  top: -25px; 
+  left: 0;
+  width: 100%;
+  text-align: left;
+  font-size: 12px;
+}

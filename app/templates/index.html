@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra cứu thời tiết</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" type="image/icon.png" href="{{ url_for('static', filename='images/logo.png') }}"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clock.css') }}">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Meow+Script&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/-" rel="stylesheet">
+    
+</head>
+<body>
+<div class="background-image"></div>
+<div class="glass-container">
+    <div class="top-right-buttons">
+        {% if session.get('logged_in') %}
+        <div class="user-info">
+            <div class="user-details">
+                <img src="{{ url_for('static', filename='images/user_avatar.png') }}" alt="User Avatar" class="user-avatar">
+                <span class="username">{{ session.get('username') }}</span>
+            </div>
+            <a href="{{ url_for('logout') }}" class="logout-link">Đăng xuất</a>
+            <a href="https://www.notion.so/B-o-c-o-n-ng-d-ng-Tra-c-u-17bb2494faaa8028b97ccf6c698237ec" class="report-link">Bản báo cáo</a>
+        </div>
+        {% endif %}
+        <button id="darkModeToggle" class="btn btn-secondary"><i class="fas fa-moon"></i></button>
+    </div>
+    <div class="container mt-4">
+        <form method="POST" action="/">
+            <div class="d-flex justify-content-center align-items-center">
+                <h1 class="headline"><i class="fas fa-cloud-sun"></i>Tra cứu thời tiết</h1>
+            </div>
+            <div class="d-flex justify-content-center search-bar">
+                <div class="search-icon">
+                    <i class="fas fa-search"></i>
+                    <input type="text" name="city" id="cityInput" class="form-control search-input"
+                           placeholder="Tìm kiếm thành phố..." autocomplete="off">
+                </div>
+                <button type="submit" class="btn search-button">Tra cứu</button>
+            </div>
+            <input type="hidden" id="latitude" name="lat">
+            <input type="hidden" id="longitude" name="lon">
+        </form>
+        <div class="row content">
+            <div class="col-md-5">
+                <div class="card mb-4 weather-info">
+                    <div class="card-body">
+                        <div class="loading-animation">
+                            <div class="dot-typing"></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2 class="card-title city-title"></h2>
+                            <div class="weather-icon-main">
+                                <i class=""></i>
+                            </div>
+                        </div>
+                        
+                        <div class="temperature-container">
+                            <div class="temperature-data">
+                                <span class="temperature"></span>
+                                <span class="feels-like"></span>
+                            </div>
+                            <div class="temperature-bar-container">
+                                <div class="temperature-bar"></div>
+                            </div>
+                        </div>
+                        
+                        <p class="card-text description"></p>
+                        
+                        <div class="info-group">
+                            <p class="card-text humidity"><i class="fas fa-tint"></i> </p>
+                            <p class="card-text pressure"><i class="fas fa-tachometer-alt"></i> </p>
+                            <p class="card-text wind"><i class="fas fa-wind"></i> </p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <button id="showMoreBtn" class="btn btn-outline-info btn-sm">
+                                <i class="fas fa-chevron-down mr-1"></i> Xem thêm
+                            </button>
+                            <span class="separatorx">|</span>
+                            <img src="{{ url_for('static', filename='images/ai_avatar.png') }}" alt="AI Avatar" class="avatar ai-avatar show-ai-chat" style="cursor: pointer;">
+                            <span class="ask-ai-text show-ai-chat" style="cursor: pointer;">Hỏi AI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="map-chart-container">
+                    <div class="map-controls">
+                        <button id="toggleView" class="btn btn-secondary mb-2" title="Chuyển đổi Biểu đồ/Bản đồ">
+                            <i class="fas fa-map map-icon"></i>
+                            <i class="fas fa-chart-line chart-icon"></i>
+                        </button>
+                        <button id="toggleLayers" class="btn btn-secondary mb-2" title="Lớp bản đồ">
+                            <i class="fas fa-layer-group"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="map" style="opacity: 1;"></div>
+                    <canvas id="weatherChart" style="display: none; opacity: 0;"></canvas>
+                    
+                    <div class="map-layers">
+                        <ul>
+                            <li data-layer="temp_new" class="active">Nhiệt độ</li>
+                            <li data-layer="wind_new">Tốc độ gió</li>
+                            <li data-layer="pressure_new">Áp suất</li>
+                            <li data-layer="precipitation_new">Lượng mưa</li>
+                            <li data-layer="clouds_new">Mây</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert-container" style="display: none;">
+            <div class="custom-alert custom-alert-danger" role="alert">
+                <h4 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Lỗi!</h4>
+                <p class="error-message"></p>
+            </div>
+        </div>
+
+        <div class="card mt-4 history-section">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="card-title history-title">Lịch sử tra cứu</h2>
+                    <div class="d-flex align-items-center">
+                        <button id="searchHistoryBtn" class="btn btn-outline-secondary btn-sm mr-2">
+                            <i class="fas fa-search"></i> Tìm kiếm
+                        </button>
+                        <button id="clearHistory" class="btn btn-danger btn-sm clear-history-button">
+                            <i class="fas fa-trash"></i> Xóa hết
+                        </button>
+                    </div>
+                </div>
+                <div class="row" id="historyContainer">
+                    <!-- Render lịch sử tra cứu -->
+                    
+                </div>
+                <div class="mt-3" id="historyButtons">
+                    <button id="prevPage" class="btn btn-outline-secondary">
+                        <i class="fas fa-chevron-left"></i> Trước
+                    </button>
+                    <button id="nextPage" class="btn btn-outline-secondary">
+                        Sau <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="aiChatSidebar" class="resizable">
+        <div class="d-flex justify-content-between align-items-center header">
+            <div class="d-flex align-items-center" style="cursor: pointer;">
+                <img src="{{ url_for('static', filename='images/ai_avatar.png') }}" alt="AI Avatar" class="avatar ai-avatar">
+                <h5 class="ml-2 mb-0">Rin</h5>
+            </div>
+            <div>
+                <button id="clearChatBtn" class="btn btn-custom btn-sm" title="Xóa đoạn chat"><i class="fas fa-trash-alt"></i></button>
+                <button id="closeAiChatBtn" class="btn btn-custom btn-sm ml-2"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div id="aiChatHistory" class="ai-chat-history">
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="aiChatInput" class="form-control" placeholder="Nhập câu hỏi của bạn...">
+            <button id="sendAiChatBtn" class="btn btn-send">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+    <div class="clock-sidebar">
+        <div class="clock-container">
+            <div class="info">
+                <div class="line top-line"></div>
+                <div class="digital-clock"></div>
+                <div class="date"></div>
+                <div class="line bottom-line"></div>
+            </div>
+            <div class="clock-face">
+                <div class="hand hour-hand"></div>
+                <div class="hand minute-hand"></div>
+                <div class="hand second-hand"></div>
+                <div class="center-dot"></div>
+                <div class="numbers">
+                    <div class="number number-1"><span>I</span></div>
+                    <div class="number number-2"><span>II</span></div>
+                    <div class="number number-3"><span>III</span></div>
+                    <div class="number number-4"><span>IV</span></div>
+                    <div class="number number-5"><span>V</span></div>
+                    <div class="number number-6"><span>VI</span></div>
+                    <div class="number number-7"><span>VII</span></div>
+                    <div class="number number-8"><span>VIII</span></div>
+                    <div class="number number-9"><span>IX</span></div>
+                    <div class="number number-10"><span>X</span></div>
+                    <div class="number number-11"><span>XI</span></div>
+                    <div class="number number-12"><span>XII</span></div>
+                  </div>
+            </div>
+        </div>
+    </div>
+    <div class="music-player-sidebar">
+        <div class="music-player">
+            <div class="visualizer"></div>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <div class="player-controls">
+                <div class="time-info">
+                    <span class="current-time">0:00</span>
+                    <span class="duration">0:00</span>
+                </div>
+                <div class="button-controls">
+                    <button class="btn-repeat"><i class="fas fa-redo"></i></button>
+                    <button class="btn-random"><i class="fas fa-random"></i></button>
+                    <button class="btn-list"><i class="fas fa-list-ul"></i></button>
+                </div>
+                
+                <div class="volume-control">
+                    <i class="fas fa-volume-down"></i>
+                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+                <div class="main-buttons">
+                    <button class="btn-prev"><i class="fas fa-backward"></i></button>
+                    <button class="btn-play-pause"><i class="fas fa-play"></i></button>
+                    <button class="btn-next"><i class="fas fa-forward"></i></button>
+                </div>
+            </div>
+            <div class="song-info">
+                <div class="album-art">
+                    <img src="" alt="Album Art">
+                </div>
+                <div class="separator-song-name-container">
+                    <div class="separator"></div>
+                    <div class="song-name"></div>
+                </div>
+            </div>
+            <div class="playlist">
+                <ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search History Modal -->
+<div class="modal fade" id="searchHistoryModal" tabindex="-1" role="dialog" aria-labelledby="searchHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchHistoryModalLabel">Tìm kiếm lịch sử</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="searchCityInput">Thành phố</label>
+                    <input type="text" class="form-control" id="searchCityInput" placeholder="Nhập tên thành phố">
+                </div>
+                <div class="form-group">
+                    <label for="searchDateInput">Ngày tra cứu</label>
+                    <input type="date" class="form-control" id="searchDateInput">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="searchHistorySubmit">Tìm kiếm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="weatherModal" tabindex="-1" role="dialog" aria-labelledby="weatherModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="weatherModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Dự báo theo giờ</h4>
+                <div id="hourlyForecast" class="d-flex flex-nowrap overflow-auto"></div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <p><strong>🌄 | Bình minh:</strong> <span id="sunrise"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>🌅 | Hoàng hôn:</strong> <span id="sunset"></span></p>
+                    </div>
+                </div>
+                <hr>
+                <h4>Thông tin thêm</h4>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <p><strong>💨 | Hướng gió:</strong> <span id="windDirection"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>☁️ | Độ che phủ mây:</strong> <span id="cloudCover"></span>%</p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <p><strong>👁️ | Tầm nhìn:</strong> <span id="visibility"></span> m</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>😓 | Cảm giác như:</strong> <span id="feelsLikeModal"></span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/clock.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    font-family: sans-serif;
+    overflow: hidden;
+}
+
+.background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: blur(5px);
+    z-index: -1;
+}
+
+.music-player {
+    width: 350px;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    user-select: none;
+}
+
+.song-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden; /* Thêm thuộc tính overflow: hidden */
+}
+
+.separator-song-name-container {
+    display: flex;
+    align-items: center;
+    transition: transform 0.5s ease-in-out;
+    width: 200px;
+    position: relative;
+    z-index: -1;
+    opacity: 0; /* Ẩn phần tên bài hát và separator ban đầu */
+}
+
+.song-info.animate .separator-song-name-container {
+    transform: translateX(0); /* Hiển thị trở lại */
+    opacity: 1; /* Hiển thị đầy đủ */
+}
+
+.separator {
+    width: 8px;
+    height: 60px;
+    background-color: white;
+    margin: 10 15px;
+    border-radius: 0px;
+}
+
+.album-art {
+    width: 150px;
+    height: 150px;
+    margin: 20px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.5s ease-in-out;
+    flex-shrink: 0;
+    z-index: 1;
+    transform: translateX(50%); /* Đẩy album art ra giữa */
+}
+
+/* Thêm animation cho album art */
+.song-info.animate .album-art {
+    transform: translateX(0);
+}
+
+.album-art img {
+    width: 80%;
+    height: 80%;
+    object-fit: cover;
+}
+
+.song-name {
+    color: #ffffff;
+    font-size: 18px;
+    margin-left: 10px;
+    text-align: left;
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-family: 'Roboto', sans-serif;
+    opacity: 0; /* Ẩn tên bài hát ban đầu */
+    transform: translateX(-20px); /* Đẩy tên bài hát sang TRÁI một chút */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+/* Thêm animation cho tên bài hát */
+.song-info.animate .song-name {
+    opacity: 1; /* Hiển thị tên bài hát */
+    transform: translateX(0); /* Di chuyển tên bài hát về vị trí ban đầu */
+}
+
+.progress-bar {
+    height: 5px;
+    width: 70%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: auto;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.progress-bar:hover {
+    background-color: #d0d0d0;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background-color: #ffafaf;
+    border-radius: 5px;
+    transition: width 0.1s linear, background-color 0.3s ease-in-out;
+}
+
+.main-buttons{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 50%;
+    margin: auto;
+}
+
+.button-controls{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.buttons {
+    margin-bottom: 10px;
+}
+
+.btn-repeat, .btn-list, .btn-random, .btn-prev, .btn-play-pause, .btn-next {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px;
+    font-size: 16px;
+    color: #ffffff;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+    padding: 0px;
+}
+
+.btn-prev, .btn-play-pause, .btn-next{
+    font-size: 14px;
+}
+
+.btn-repeat:hover, .btn-list:hover, .btn-random:hover, .btn-prev:hover, .btn-play-pause:hover, .btn-next:hover {
+    transform: scale(1.1);
+    color: #ffafaf;
+}
+
+.btn-repeat.active, .btn-random.active {
+    color: #ffafaf; /* Màu khi kích hoạt */
+}
+
+.btn-random:focus, .btn-list:focus, .btn-repeat:focus, .btn-prev:focus, .btn-play-pause:focus, .btn-next:focus {
+    outline: none;
+}
+
+.btn-play-pause {
+    color: #fff;
+    font-size: 22px;
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.volume-control i {
+    margin: 0 5px;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.volume-control i:hover{
+    color: #ffafaf;
+}
+
+.volume-slider {
+    -webkit-appearance: none;
+    width: 100px;
+    height: 5px;
+    background: #e0e0e0;
+    outline: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.volume-slider:hover {
+    background-color: #d0d0d0;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ffafaf;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.volume-slider:hover::-webkit-slider-thumb {
+    background-color: #e69191;
+}
+
+.playlist {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.playlist.open {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.playlist ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.playlist li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    text-align: left;
+    color: #ffffff;
+    display: flex; /* Sử dụng flexbox để căn chỉnh */
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+.playlist li:hover {
+    background-color: #fafafa;
+    color: #ffafaf;
+}
+
+.playlist li.playing {
+    background-color: #ffafaf;
+    color: #fff;
+}
+
+.playlist-item-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%; /* Tạo hình tròn */
+    overflow: hidden;
+    margin-right: 10px; /* Cách tên bài hát một khoảng */
+    flex-shrink: 0; /* Không bị co lại khi tên bài hát quá dài */
+}
+
+.playlist-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Thêm style cho span để căn giữa text */
+.playlist li span {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.visualizer {
+    width: 100%;
+    height: 50px;
+    position: absolute;
+    /* Xóa top: 0; */
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    /* Thêm bottom: 100%; và transform để đưa nó lên trên */
+    bottom: 101%;
+    transform: translateY(5px);
+    z-index: 1; /* Đảm bảo z-index của visualizer lớn hơn progress-bar */
+}
+
+.bar {
+    width: 4px;
+    height: 1px;
+    background-color: white;
+    margin: 0 2px;
+    border-radius: 2px;
+    transition: height 0s ease-in-out;
+}
+
+.time-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #ffffff;
+    width: 88%;
+    margin: auto;
+}
+
+.current-time, .duration {
+    position: relative;
+}
