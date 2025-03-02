@@ -61,7 +61,6 @@
     *   Lưu trữ lịch sử tra cứu theo từng tài khoản.
 *   **Chế độ tối (Dark Mode):** Chuyển đổi giữa giao diện sáng và tối.
 *   **Responsive:** Giao diện tương thích với nhiều kích thước màn hình (desktop, mobile).
-*   **Đa ngôn ngữ:** Hỗ trợ tiếng Việt, tiếng Anh, tiếng Nhật (ít nhất là phần README này).
 * **Thông báo lỗi:** Hiển thị thông báo lỗi rõ ràng khi có lỗi xảy ra (ví dụ: không tìm thấy thành phố).
 * **Autocomplete:** Gợi ý tên thành phố khi người dùng nhập.
 
@@ -245,7 +244,6 @@ weather_app/
     *   Stores search history for each account.
 *   **Dark Mode:** Switch between light and dark themes.
 *   **Responsive:** The interface is compatible with various screen sizes (desktop, mobile).
-*   **Multi-language:** Supports Vietnamese, English, and Japanese (at least this README).
 * **Error Alert:** Display clear error messages when an error (e.g. city not found).
 * **Autocomplete:** City name suggestions.
 
@@ -429,7 +427,6 @@ weather_app/
     *   アカウントごとに検索履歴を保存します。
 *   **ダークモード:** ライトテーマとダークテーマを切り替えます。
 *   **レスポンシブ:** インターフェイスはさまざまな画面サイズ (デスクトップ、モバイル) に対応しています。
-*   **多言語:** ベトナム語、英語、日本語をサポートしています (少なくともこの README)。
 * **エラーアラート:** エラー(都市が見つからないなど)が発生した場合、明確なエラーメッセージを表示します。
 * **オートコンプリート:** 都市名の候補を表示します。
 
