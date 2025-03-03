@@ -1,5 +1,12 @@
 # Weather App ᓚᘏᗢ
 
+## Login/Register Page
+![Image](https://github.com/user-attachments/assets/0ae52afd-662b-47b2-b45e-8af3d9e89441)
+
+## Weather Page
+
+![Image](https://github.com/user-attachments/assets/cbb6f964-87e1-42e4-a7a0-5b430caa3d48)
+
 <!-- Vietnamese -->
 <details>
   <summary>🇻🇳 Tiếng Việt</summary>
