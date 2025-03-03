@@ -6,7 +6,6 @@
 ## Weather Page
 
 ![image](https://github.com/user-attachments/assets/d2083a10-7389-4624-969d-31ab0297f7ad)
-![image](https://github.com/user-attachments/assets/ade64d41-de12-4250-8a5e-5199a07855ba)
 
 
 ## Introduction
