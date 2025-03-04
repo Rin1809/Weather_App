@@ -1,8 +1,6 @@
 # Môi trường ảo (virtual environment)
 moitruongao/
 
-# File cấu hình, chứa thông tin nhạy cảm
-app/.env
 
 # Thư mục chứa dữ liệu người dùng
 user_data/
