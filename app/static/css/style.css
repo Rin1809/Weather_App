@@ -2185,7 +2185,6 @@ flex-shrink: 0;
             list-style: none;
             transform: translateX(-100%); /* Đẩy bảng layer sang trái */
             opacity: 0; /* Ẩn bảng layer ban đầu */
-            /* Sửa transition */
             transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; 
         }
         
